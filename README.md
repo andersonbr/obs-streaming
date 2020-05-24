@@ -6,7 +6,7 @@
 
 * Exec ./run.sh
 
-After this you will able to send stream from OBS to nginx inside docker container
+After this you will be able to send stream from OBS to nginx inside docker container
 
 ## OBS custom stream:
 
