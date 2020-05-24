@@ -17,21 +17,21 @@ stream key: live
 
 * recording tab
 
-** custom output (ffmpeg) -> output to url -> udp://224.0.0.1:9999
+  * custom output (ffmpeg) -> output to url -> udp://224.0.0.1:9999
 
-** container format (mpegts)
+  * container format (mpegts)
 
-** video bitrate between 3000 - 4000 kbps
+  * video bitrate between 3000 - 4000 kbps
 
-** keyframes (120) = 4s when 30fps
+  * keyframes (120) = 4s when 30fps
 
-** check all codecs, and select h264_videotoolbox for macOS
+  * check all codecs, and select h264_videotoolbox for macOS
 
-** config line: -preset veryfast
+  * config line: -preset veryfast -profile:v baseline
 
-** audio bitrate: 128 - 256kbps
+  * audio bitrate: 128 - 256kbps
 
-** audio codec: aac
+  * audio codec: aac
 
 
 # send to services
