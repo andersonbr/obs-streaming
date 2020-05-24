@@ -22,6 +22,11 @@ ffmpeg -i rtmp://localhost:1935/dash/live -c:a copy -c:v copy -f flv rtmp://a.rt
 ## Facebook
 ffmpeg -i rtmp://localhost:1935/dash/live -s 1280x720 -c:v libx264 -v:b 3000k -c:a copy -f flv rtmps://live-api-s.facebook.com:443/rtmp/YOUR_FACEBOOK_KEY
 
+## Instagram
+ffmpeg -i rtmp://localhost:1935/dash/live -c:a copy -c:v copy -f flv rtmps://live-upload.instagram.com:443/rtmp/YOUR_INSTAGRAM_KEY
+
+* to get Instagram Key, use YellowDuck.tv
+
 * change libx264 to h264_videotoolbox to use GPU acceleration on macOS
 
 # optional
