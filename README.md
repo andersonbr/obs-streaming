@@ -76,6 +76,10 @@ ffmpeg -i rtmp://localhost/dash/live \
 ffmpeg -re -i ARQUIVO.flv ....
 
 
+## Streaming audio from macOS to HLS in current directory
+ffmpeg -f avfoundation -i ":0" -c:a aac -b:a 128k -f hls -hls_time 4 -hls_flags delete_segments index.m3u8
+
+
 ## Other options with ffmpeg
 
 https://trac.ffmpeg.org/wiki/Creating%20multiple%20outputs

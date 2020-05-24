@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<body>
+  <audio id="radio" autoplay controls width=100% playsinline muted>
+    <source src="/audio/radio/index.m3u8" />
+  </audio>
+  <div id="unmute">TOQUE PARA OUVIR</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@canary"></script>
+  <script>
+    var audio = document.getElementById('radio');
+    if (Hls.isSupported()) {
+      audio.muted = true
+      var hls = new Hls();
+      hls.loadSource('/audio/radio/index.m3u8');
+      hls.attachMedia(audio);
+      hls.on(Hls.Events.MANIFEST_PARSED, function () {
+        audio.play();
+      });
+    } else if (audio.canPlayType('application/vnd.apple.mpegurl')) {
+      audio.muted = true
+      audio.src = '/audio/radio/index.m3u8';
+      audio.addEventListener('loadedmetadata', function () {
+        audio.play();
+      });
+    }
+    document.querySelector("#unmute").onclick = function() {
+      audio.muted = false
+    }
+  </script>
+  <style type="text/css">
+    body {
+      background-color: black;
+      color: white;
+    }
+    #radio {
+      display: none;
+    }
+    #unmute {
+      background-color: red;
+      color: white;
+      font-size: 4em;
+      font-weight: bold;
+    }
+  </style>
+</body>
+
+</html>
