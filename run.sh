@@ -1,0 +1,1 @@
+docker run --name streaming --rm -it -v $PWD/nginx.conf:/etc/nginx/nginx.conf -v $PWD/data:/data -p 1935:1935 -p 8888:8888 andersonbr/nginx-h2-rtmp-ffmpeg
