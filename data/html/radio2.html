@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+    integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+</head>
+
+<body>
+  <div class="container">
+    <div id="player" class="hidden">
+      <audio class="media" autoplay controls playsinline muted>
+        <source src="/audio/radio/index.m3u8" />
+      </audio>
+    </div>
+    <div class="buttonsArea">
+      <button type="button" class="btn btn-primary" id="bt-play"><i class="fa fa-play play"></i><i
+          class="fa fa-pause pause hidden"></i></button>
+      <button type="button" class="btn btn-primary"><i class="fa fa-stop"></i></button>
+      <button type="button" class="btn btn-primary" id="bt-mute"><i class="fas fa-volume-mute muted"></i><i
+          class="fas fa-volume-up nomuted hidden"></i></button>
+    </div>
+    <div id="duration"></div>
+    <div id="unmuteplay">TOQUE PARA OUVIR</div>
+    <div id="alert"></div>
+  </div>
+
+  <style>
+    .hidden {
+      display: none;
+    }
+
+    #player .media {
+      width: 100%;
+    }
+
+    .buttonsArea {
+      padding: 5px;
+    }
+
+    #unmuteplay {
+      padding: 20px;
+      color: #dfdfdf;
+      background-color: #727272;
+    }
+  </style>
+
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@canary"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
+  </script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
+  </script>
+
+  <script>
+    var mediaPlayer = $("#player .media")[0]
+
+    var playPauseEv = function () {
+      $("#bt-play .play").toggle()
+      $("#bt-play .pause").toggle()
+    }
+    mediaPlayer.onplay = playPauseEv
+    mediaPlayer.onpause = playPauseEv
+    mediaPlayer.addEventListener("timeupdate", function () {
+      var s = parseInt(mediaPlayer.currentTime % 60);
+      var m = parseInt((mediaPlayer.currentTime / 60) % 60);
+      $("#duration").html(m + ':' + s)
+    }, false)
+    mediaPlayer.onvolumechange = function (ev) {
+      if (mediaPlayer.muted) {
+        $("#bt-mute .muted").show()
+        $("#bt-mute .nomuted").hide()
+      } else {
+        $("#bt-mute .muted").hide()
+        $("#bt-mute .nomuted").show()
+      }
+    }
+
+    $("#bt-play").click((e) => {
+      if (mediaPlayer.paused)
+        mediaPlayer.play()
+      else
+        mediaPlayer.pause()
+    })
+    $("#unmuteplay").click((e) => {
+      if (mediaPlayer.muted)
+        mediaPlayer.muted = !mediaPlayer.muted
+      mediaPlayer.play()
+    })
+    $("#bt-mute").click((e) => {
+      mediaPlayer.muted = !mediaPlayer.muted
+    })
+
+    var mediaUrl = "/audio/radio/index.m3u8"
+    if (Hls.isSupported()) {
+      $("#alert").html("HLS Supported")
+      mediaPlayer.muted = true
+      var hls = new Hls();
+      hls.loadSource(mediaUrl);
+      hls.attachMedia(mediaPlayer);
+
+      // Object.keys(Hls.Events).forEach(function (e) {
+      //   hls.on(Hls.Events[e], console.info.bind(console));
+      // });
+      hls.on(Hls.Events.MANIFEST_PARSED, function (ev) {
+        mediaPlayer.play()
+      });
+    } else if (mediaPlayer.canPlayType('application/vnd.apple.mpegurl')) {
+      $("#alert").html("Native tag Supported")
+      mediaPlayer.muted = true
+      // mediaPlayer.src = mediaUrl
+      var source = document.createElement("source")
+      source.src = mediaUrl
+      mediaPlayer.appendChild(source)
+      mediaPlayer.addEventListener('loadedmetadata', function () {
+        mediaPlayer.play()
+      })
+    } else {
+      $("#alert").html("Not Supported")
+    }
+  </script>
+</body>
+
+</html>

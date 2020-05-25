@@ -79,6 +79,7 @@ ffmpeg -re -i ARQUIVO.flv ....
 ## Streaming audio from macOS to HLS in current directory
 ffmpeg -f avfoundation -i ":0" -c:a aac -b:a 128k -f hls -hls_time 4 -hls_flags delete_segments index.m3u8
 
+* List devices: ffmpeg -f avfoundation -list_devices true -i "" 2>&1|grep "input device @"|gsed -r -e 's/.* @ 0x[0-9a-f]+\] //g'
 
 ## Other options with ffmpeg
 
